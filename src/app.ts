@@ -1,29 +1,11 @@
-import express, { Request, Response, NextFunction } from 'express';
-import logger from './config/logger';
-import { HttpError } from 'http-errors';
+import express from 'express';
+import { globalErrorHandler } from './middlewares/globalErrorHandler';
 
 const app = express();
 
 app.get('/', (req, res) => {
-    // const error = createError(401, 'Unauthorized');
-    // throw error;
-    res.send('Welcome to auth service');
+    res.send('Welcome to catalog service');
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {
-    // Handle the error here
-    logger.error(err.message);
-    const statusCode = err.statusCode || 500;
-    res.status(statusCode).json({
-        errors: [
-            {
-                type: err.name,
-                message: err.message,
-                path: '',
-                location: '',
-            },
-        ],
-    });
-});
+app.use(globalErrorHandler);
 export default app;
