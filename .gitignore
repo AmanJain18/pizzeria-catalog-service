@@ -88,6 +88,9 @@ public/
 .env.test
 .env.production
 
+# config based environment variable files
+/config
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache
