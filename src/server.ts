@@ -1,11 +1,14 @@
 import config from 'config';
 import app from './app';
 import logger from './config/logger';
+import { connectDb } from './config/dbConfig';
 
-const startServer = () => {
+const startServer = async () => {
     const PORT: number = config.get('catalogService.serverConfig.port') || 5502;
 
     try {
+        await connectDb();
+        logger.info('Connected to the database');
         app.listen(PORT, () => {
             logger.info(`Server is running on port ${PORT}`);
         });
@@ -17,4 +20,4 @@ const startServer = () => {
     }
 };
 
-startServer();
+void startServer();
