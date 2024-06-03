@@ -44,4 +44,16 @@ router.get(
     ),
 );
 
+router.get(
+    '/:categoryId',
+    asyncFnWrapper(
+        (req: Request, res: Response, next: NextFunction) =>
+            categoryController.getSingleCategory(
+                req,
+                res,
+                next,
+            ) as unknown as RequestHandler,
+    ),
+);
+
 export default router;

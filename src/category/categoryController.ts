@@ -43,4 +43,14 @@ export class CategoryController {
         this.logger.info('All categories fetched');
         res.status(200).json(category);
     }
+
+    async getSingleCategory(req: Request, res: Response, next: NextFunction) {
+        const { categoryId } = req.params;
+        const category = await this.categoryService.getOne(categoryId);
+        if (!category) {
+            return next(createHttpError(404, 'Category not found'));
+        }
+        this.logger.info(`Getting category`, { id: category._id });
+        res.json(category);
+    }
 }
