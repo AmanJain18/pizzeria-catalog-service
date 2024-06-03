@@ -33,4 +33,15 @@ router.post(
     ),
 );
 
+router.get(
+    '/',
+    asyncFnWrapper(
+        (req: Request, res: Response) =>
+            categoryController.getAllCategory(
+                req,
+                res,
+            ) as unknown as RequestHandler,
+    ),
+);
+
 export default router;

@@ -36,4 +36,11 @@ export class CategoryController {
             message: 'Category created',
         });
     }
+
+    async getAllCategory(req: Request, res: Response) {
+        const category = await this.categoryService.getAll();
+
+        this.logger.info('All categories fetched');
+        res.status(200).json(category);
+    }
 }
