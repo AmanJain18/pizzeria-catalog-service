@@ -1,26 +1,7 @@
 // Purpose: Model for categories.
 
 import mongoose from 'mongoose';
-
-export interface PriceConfiguration {
-    [key: string]: {
-        priceType: 'base' | 'additional';
-        sizeOptions: string[];
-    };
-}
-
-export interface Attribute {
-    name: string;
-    widgetType: 'switch' | 'radio';
-    defaultValue: string;
-    options: string[];
-}
-
-export interface Category {
-    name: string;
-    priceConfiguration: PriceConfiguration;
-    attributes: Attribute[];
-}
+import { PriceConfiguration, Attribute, Category } from './categoryTypes';
 
 const priceConfigurationSchema = new mongoose.Schema<PriceConfiguration>({
     priceType: {
