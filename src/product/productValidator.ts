@@ -1,5 +1,5 @@
 import { body } from 'express-validator';
-import { Attribute } from './productTypes';
+// import { Attribute } from './productTypes';
 
 export default [
     // Validate 'name'
@@ -21,10 +21,10 @@ export default [
         .withMessage('Product description cannot be empty')
         .trim(),
 
-    body('image').custom((value, { req }) => {
-        if (!req.files) throw new Error('Product image is required');
-        return true;
-    }),
+    // body('image').custom((value, { req }) => {
+    //     if (!req.files) throw new Error('Product image is required');
+    //     return true;
+    // }),
 
     body('tenantId')
         .exists()
@@ -48,8 +48,8 @@ export default [
     body('priceConfiguration')
         .exists()
         .withMessage('Price configuration is required')
-        .isObject()
-        .withMessage('Price configuration must be an object')
+        // .isObject()
+        // .withMessage('Price configuration must be an object')
         .custom((priceConfiguration: string | number) => {
             if (Object.keys(priceConfiguration).length === 0) {
                 throw new Error('Price configuration cannot be empty');
@@ -85,19 +85,17 @@ export default [
         }),
 
     // Validate 'attributes': array of objects with 'name', 'widgetType', 'defaultValue', and 'options'
-    body('attributes')
-        .exists()
-        .withMessage('Attributes are required')
-        .isArray()
-        .withMessage('Attributes must be an array')
-        .custom((attributes: Attribute[]) => {
-            if (!Array.isArray(attributes) || attributes.length === 0) {
-                throw new Error(
-                    'Attributes array cannot be empty and must have at least one element',
-                );
-            }
-            return true;
-        }),
+    body('attributes').exists().withMessage('Attributes are required'),
+    // .isArray()
+    // .withMessage('Attributes must be an array')
+    // .custom((attributes: Attribute[]) => {
+    //     if (!Array.isArray(attributes) || attributes.length === 0) {
+    //         throw new Error(
+    //             'Attributes array cannot be empty and must have at least one element',
+    //         );
+    //     }
+    //     return true;
+    // }),
 
     body('attributes.*.name')
         .exists()

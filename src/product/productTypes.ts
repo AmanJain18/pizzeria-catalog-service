@@ -13,9 +13,9 @@ export interface Attribute {
 export interface Product {
     name: string;
     description: string;
-    image: string;
-    priceConfiguration: PriceConfiguration;
-    attributes: Attribute[];
+    image?: string;
+    priceConfiguration: string;
+    attributes: string;
     tenantId: string;
     categoryId: string;
     isPublished: boolean;

@@ -1,8 +1,9 @@
 // Purpose: Model for categories.
 
 import mongoose from 'mongoose';
+import { Attribute, PriceConfiguration } from './productTypes';
 
-const priceConfigurationSchema = new mongoose.Schema({
+const priceConfigurationSchema = new mongoose.Schema<PriceConfiguration>({
     priceType: {
         type: String,
         enum: ['base', 'additional'],
@@ -15,7 +16,7 @@ const priceConfigurationSchema = new mongoose.Schema({
     },
 });
 
-const attributeSchema = new mongoose.Schema({
+const attributeSchema = new mongoose.Schema<Attribute>({
     name: {
         type: String,
         required: true,
