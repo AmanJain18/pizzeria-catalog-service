@@ -84,3 +84,119 @@ export default [
             value.map((option: string) => option.trim()),
         ), // Trim whitespace from each option
 ];
+
+// const { checkSchema } = require('express-validator');
+
+// const validateCategory = checkSchema({
+//     name: {
+//         in: ['body'], // Specify location (body in this case)
+//         exists: {
+//             errorMessage: 'Category name is required',
+//         },
+//         isString: {
+//             errorMessage: 'Category name must be a string',
+//         },
+//         trim: true, // Trim leading/trailing whitespace
+//     },
+//     priceConfiguration: {
+//         in: ['body'],
+//         exists: {
+//             errorMessage: 'Price configuration is required',
+//         },
+//         isObject: {
+//             errorMessage: 'Price configuration must be an object',
+//         },
+//         custom: {
+//             options: (value) => {
+//                 if (!value?.priceType || !value.sizeOptions) {
+//                     throw new Error(
+//                         'Missing required fields in price configuration',
+//                     );
+//                 }
+//             },
+//         },
+//     },
+//     'priceConfiguration.priceType': {
+//         in: ['body'],
+//         isIn: {
+//             options: ['base', 'additional'],
+//             errorMessage: 'Invalid price type. Must be "base" or "additional"',
+//         },
+//     },
+//     'priceConfiguration.sizeOptions': {
+//         in: ['body'],
+//         isArray: {
+//             errorMessage: 'Size options must be an array',
+//         },
+//         notEmpty: {
+//             errorMessage: 'Size options cannot be empty',
+//         },
+//         customSanitizer: (value) => value.map((option) => option.trim()), // Trim whitespace from each size option
+//     },
+//     attributes: {
+//         in: ['body'],
+//         exists: {
+//             errorMessage: 'Attributes are required',
+//         },
+//         isArray: {
+//             errorMessage: 'Attributes must be an array',
+//         },
+//         notEmpty: {
+//             errorMessage: 'Attributes cannot be empty',
+//         },
+//     },
+//     'attributes.*': {
+//          Validate each attribute object within the array
+//         custom: {
+//             options: (value) => {
+//                 if (
+//                     !value.name ||
+//                     !value.widgetType ||
+//                     !value.defaultValue ||
+//                     !value.options
+//                 ) {
+//                     throw new Error('Missing required fields in attribute');
+//                 }
+//             },
+//         },
+//     },
+//     'attributes.*.name': {
+//         in: ['body'],
+//         exists: {
+//             errorMessage: 'Attribute name is required',
+//         },
+//         isString: {
+//             errorMessage: 'Attribute name must be a string',
+//         },
+//         trim: true, // Trim leading/trailing whitespace
+//     },
+//     'attributes.*.widgetType': {
+//         in: ['body'],
+//         isIn: {
+//             options: ['switch', 'radio'],
+//             errorMessage: 'Invalid widget type. Must be "switch" or "radio"',
+//         },
+//     },
+//     'attributes.*.defaultValue': {
+//         in: ['body'],
+//         exists: {
+//             errorMessage: 'Attribute default value is required',
+//         },
+//         isString: {
+//             errorMessage: 'Attribute default value must be a string',
+//         },
+//         trim: true, // Trim leading/trailing whitespace
+//     },
+//     'attributes.*.options': {
+//         in: ['body'],
+//         isArray: {
+//             errorMessage: 'Attribute options must be an array',
+//         },
+//         notEmpty: {
+//             errorMessage: 'Attribute options cannot be empty',
+//         },
+//         customSanitizer: (value) => value.map((option) => option.trim()), // Trim whitespace from each option
+//     },
+// });
+
+// export default validateCategory;
