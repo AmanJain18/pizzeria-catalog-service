@@ -1,5 +1,5 @@
 import winston from 'winston';
-import { Config } from '.';
+import config from 'config';
 
 const logger = winston.createLogger({
     level: 'info',
@@ -13,23 +13,23 @@ const logger = winston.createLogger({
             level: 'error',
             dirname: 'logs',
             filename: 'error.log',
-            silent: Config.NODE_ENV === 'test',
+            silent: config.get('catalogService.NODE_ENV') === 'test',
         }),
         new winston.transports.File({
             level: 'info',
             dirname: 'logs',
             filename: 'info.log',
-            silent: Config.NODE_ENV === 'test',
+            silent: config.get('catalogService.NODE_ENV') === 'test',
         }),
         new winston.transports.File({
             level: 'debug',
             dirname: 'logs',
             filename: 'debug.log',
-            silent: Config.NODE_ENV === 'test',
+            silent: config.get('catalogService.NODE_ENV') === 'test',
         }),
         new winston.transports.Console({
             level: 'info',
-            silent: Config.NODE_ENV === 'test',
+            silent: config.get('catalogService.NODE_ENV') === 'test',
         }),
     ],
 });

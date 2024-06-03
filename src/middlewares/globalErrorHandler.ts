@@ -39,7 +39,7 @@ export const globalErrorHandler = (
                 msg: message,
                 path: req.path,
                 method: req.method,
-                location: 'auth-server',
+                location: 'catalog-server',
                 stack: inProduction ? null : err.stack,
             },
         ],
