@@ -8,6 +8,7 @@ import { CategoryController } from './categoryController';
 import categoryValidator from './categoryValidator';
 import { CategoryService } from './categoryService';
 import logger from '../config/logger';
+import { asyncFnWrapper } from '../utils/asyncFnWrapper';
 
 const router = express.Router();
 
@@ -17,12 +18,14 @@ const categoryController = new CategoryController(categoryService, logger);
 router.post(
     '/',
     categoryValidator,
-    (req: Request, res: Response, next: NextFunction) =>
-        categoryController.createCategory(
-            req,
-            res,
-            next,
-        ) as unknown as RequestHandler,
+    asyncFnWrapper(
+        (req: Request, res: Response, next: NextFunction) =>
+            categoryController.createCategory(
+                req,
+                res,
+                next,
+            ) as unknown as RequestHandler,
+    ),
 );
 
 export default router;
