@@ -50,10 +50,7 @@ export default [
                 );
             }
             return true;
-        })
-        .isString()
-        .withMessage('Size options must be strings')
-        .trim(),
+        }),
 
     // Validate 'attributes': array of objects with 'name', 'widgetType', 'defaultValue', and 'options'
     body('attributes')
@@ -105,10 +102,7 @@ export default [
                 throw new Error('Options array must have at least one element');
             }
             return true;
-        })
-        .isString()
-        .withMessage('Options must be strings')
-        .trim(),
+        }),
 ];
 
 /*
