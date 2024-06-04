@@ -71,4 +71,15 @@ router.patch(
     ),
 );
 
+router.get(
+    '/',
+    asyncFnWrapper(
+        (req: Request, res: Response) =>
+            productController.getProducts(
+                req,
+                res,
+            ) as unknown as RequestHandler,
+    ),
+);
+
 export default router;
