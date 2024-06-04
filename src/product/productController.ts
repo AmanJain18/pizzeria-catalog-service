@@ -5,10 +5,14 @@ import { Logger } from 'winston';
 import createHttpError from 'http-errors';
 import { ProductService } from './productService';
 import { Product } from './productTypes';
+import { FileStorage, UploadFileData } from '../common/types/storage';
+import { v4 as uuid } from 'uuid';
+import { UploadedFile } from 'express-fileupload';
 
 export class ProductController {
     constructor(
         private productService: ProductService,
+        private storage: FileStorage,
         private logger: Logger,
     ) {}
     async createProduct(req: Request, res: Response, next: NextFunction) {
@@ -17,6 +21,18 @@ export class ProductController {
         if (!result.isEmpty()) {
             return next(createHttpError(400, result.array()[0].msg as string));
         }
+
+        const uploadedFile = req.files?.image as UploadedFile;
+        if (!uploadedFile) {
+            return next(createHttpError(400, 'Product image is required'));
+        }
+        const imageFilename = uuid();
+
+        await this.storage.uploadFile({
+            fileName: imageFilename,
+            mimeType: uploadedFile.mimetype,
+            fileData: uploadedFile.data as Buffer,
+        } as UploadFileData);
 
         const {
             name,
@@ -36,8 +52,7 @@ export class ProductController {
             tenantId,
             categoryId,
             isPublished,
-            // todo: image upload
-            image: 'image.jpg',
+            image: imageFilename,
         } as unknown as Product);
 
         this.logger.info('New product created', { id: product._id });
