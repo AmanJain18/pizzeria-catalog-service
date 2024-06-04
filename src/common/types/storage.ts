@@ -5,7 +5,7 @@ export interface FileStorage {
         filePath: string,
         destinationPath: string,
     ): Promise<void>;
-    deleteFile(filePath: string): Promise<void>;
+    deleteFile(filename: string): Promise<void>;
     // getSignedUrl(filePath: string): Promise<string>;
     listFiles(): Promise<string[]>;
 }

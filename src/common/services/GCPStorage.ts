@@ -19,7 +19,7 @@ export class GCPStorage implements FileStorage {
         this.bucketName = config.get('storage.bucketName');
     }
 
-    async uploadFile(fileData: UploadFileData) {
+    async uploadFile(fileData: UploadFileData): Promise<void> {
         const file = this.storage
             .bucket(this.bucketName)
             .file(fileData.fileName);
@@ -44,8 +44,8 @@ export class GCPStorage implements FileStorage {
             .download({ destination: destinationPath });
     }
 
-    async deleteFile(filePath: string) {
-        await this.storage.bucket(this.bucketName).file(filePath).delete();
+    async deleteFile(fileName: string): Promise<void> {
+        await this.storage.bucket(this.bucketName).file(fileName).delete();
     }
 
     // async getSignedUrl(

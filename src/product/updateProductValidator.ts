@@ -21,11 +21,6 @@ export default [
         .withMessage('Product description cannot be empty')
         .trim(),
 
-    // body('image').custom((value, { req }) => {
-    //     if (!req.files) throw new Error('Product image is required');
-    //     return true;
-    // }),
-
     body('tenantId')
         .exists()
         .withMessage('Tenant id is required')

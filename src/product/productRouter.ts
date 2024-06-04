@@ -5,7 +5,8 @@ import express, {
     Response,
 } from 'express';
 import { ProductController } from './productController';
-import productValidator from './productValidator';
+import createProductValidator from './createProductValidator';
+import updateProductValidator from './updateProductValidator';
 import { ProductService } from './productService';
 import logger from '../config/logger';
 import { asyncFnWrapper } from '../common/utils/asyncFnWrapper';
@@ -37,10 +38,32 @@ router.post(
             next(createHttpError(400, 'File size limit exceeded'));
         },
     }),
-    productValidator,
+    createProductValidator,
     asyncFnWrapper(
         (req: Request, res: Response, next: NextFunction) =>
             productController.createProduct(
+                req,
+                res,
+                next,
+            ) as unknown as RequestHandler,
+    ),
+);
+
+router.patch(
+    '/:productId',
+    isAuthenticated,
+    isAuthorized([Roles.ADMIN, Roles.MANAGER]),
+    fileUpload({
+        limits: { fileSize: 2 * 1024 * 1024 }, // Set the file size limit to 2 MB
+        abortOnLimit: true,
+        limitHandler: (req, res, next) => {
+            next(createHttpError(400, 'File size limit exceeded'));
+        },
+    }),
+    updateProductValidator,
+    asyncFnWrapper(
+        (req: Request, res: Response, next: NextFunction) =>
+            productController.updateProduct(
                 req,
                 res,
                 next,

@@ -6,4 +6,20 @@ export class ProductService {
         const newProduct = new ProductModel(product);
         return await newProduct.save();
     }
+
+    async update(id: string, product: Product) {
+        return await ProductModel.findOneAndUpdate(
+            { _id: id },
+            {
+                $set: product,
+            },
+            {
+                new: true,
+            },
+        );
+    }
+
+    async getById(id: string) {
+        return await ProductModel.findById(id);
+    }
 }
