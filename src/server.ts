@@ -4,7 +4,7 @@ import logger from './config/logger';
 import { connectDb } from './config/dbConfig';
 
 const startServer = async () => {
-    const PORT: number = config.get('catalogService.serverConfig.port') || 5502;
+    const PORT: number = config.get('serverConfig.port') || 5502;
 
     try {
         await connectDb();

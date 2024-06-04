@@ -13,23 +13,23 @@ const logger = winston.createLogger({
             level: 'error',
             dirname: 'logs',
             filename: 'error.log',
-            silent: config.get('catalogService.NODE_ENV') === 'test',
+            silent: config.get('serverConfig.NODE_ENV') === 'test',
         }),
         new winston.transports.File({
             level: 'info',
             dirname: 'logs',
             filename: 'info.log',
-            silent: config.get('catalogService.NODE_ENV') === 'test',
+            silent: config.get('serverConfig.NODE_ENV') === 'test',
         }),
         new winston.transports.File({
             level: 'debug',
             dirname: 'logs',
             filename: 'debug.log',
-            silent: config.get('catalogService.NODE_ENV') === 'test',
+            silent: config.get('serverConfig.NODE_ENV') === 'test',
         }),
         new winston.transports.Console({
             level: 'info',
-            silent: config.get('catalogService.NODE_ENV') === 'test',
+            silent: config.get('serverConfig.NODE_ENV') === 'test',
         }),
     ],
 });

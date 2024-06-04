@@ -6,9 +6,7 @@ import config from 'config';
 export const configSetup = (app: express.Application) => {
     app.use(
         cors({
-            origin:
-                config.get('catalogService.cors.corsOrigin') ||
-                'http://localhost:3000',
+            origin: config.get('cors.corsOrigin') || 'http://localhost:3000',
             credentials: true,
         }),
     );

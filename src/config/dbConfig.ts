@@ -9,7 +9,7 @@ const { host, port, user, password, database } = config.get<{
     user: string;
     password: string;
     database: string;
-}>('catalogService.dbConfig');
+}>('dbConfig');
 
 export const dbConfig = {
     url: `mongodb://${user}:${password}@${host}:${port}/${database}?authSource=admin&w=1`,
