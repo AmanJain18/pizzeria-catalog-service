@@ -1,12 +1,7 @@
 export interface FileStorage {
     uploadFile(fileData: UploadFileData): Promise<void>;
-    downloadFile(
-        bucketName: string,
-        filePath: string,
-        destinationPath: string,
-    ): Promise<void>;
-    deleteFile(filename: string): Promise<void>;
-    // getSignedUrl(filePath: string): Promise<string>;
+    deleteFile(fileName: string): Promise<void>;
+    getFileUrl(fileName: string): string;
     listFiles(): Promise<string[]>;
 }
 

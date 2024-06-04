@@ -16,7 +16,7 @@ export interface Product {
     _id?: mongoose.Types.ObjectId;
     name: string;
     description: string;
-    image?: string;
+    image: string;
     priceConfiguration: string;
     attributes: string;
     tenantId: string;

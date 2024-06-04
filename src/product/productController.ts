@@ -161,6 +161,14 @@ export class ProductController {
             },
         );
         this.logger.info('All products are fetched');
+
+        products.data = (products.data as Product[]).map(
+            (product: Product) => ({
+                ...product,
+                image: this.storage.getFileUrl(product.image),
+            }),
+        );
+
         res.json(products);
     }
 }

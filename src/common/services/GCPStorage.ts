@@ -37,30 +37,15 @@ export class GCPStorage implements FileStorage {
         });
     }
 
-    async downloadFile(filePath: string, destinationPath: string) {
-        await this.storage
-            .bucket(this.bucketName)
-            .file(filePath)
-            .download({ destination: destinationPath });
+    getFileUrl(fileName: string): string {
+        const file = this.storage.bucket(this.bucketName).file(fileName);
+        const publicUrl = file.publicUrl();
+        return publicUrl;
     }
 
     async deleteFile(fileName: string): Promise<void> {
         await this.storage.bucket(this.bucketName).file(fileName).delete();
     }
-
-    // async getSignedUrl(
-    //     filePath: string,
-    //     expirationTime?: number,
-    // ): Promise<string> {
-    //     const options = {
-    //         action: 'read',
-    //         expires: expirationTime || Date.now() + 1000 * 60 * 60, // Default to 1 hour
-    //     };
-    //     return await this.storage
-    //         .bucket(this.bucketName)
-    //         .file(filePath)
-    //         .getSignedUrl(options);
-    // }
 
     async listFiles(): Promise<string[]> {
         const [files] = await this.storage.bucket(this.bucketName).getFiles();
