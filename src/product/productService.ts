@@ -3,12 +3,11 @@ import { Product, QueryFilters } from './productTypes';
 
 export class ProductService {
     async create(product: Product) {
-        const newProduct = new ProductModel(product);
-        return await newProduct.save();
+        return (await ProductModel.create(product)) as Product;
     }
 
     async update(id: string, product: Product) {
-        return await ProductModel.findOneAndUpdate(
+        return (await ProductModel.findOneAndUpdate(
             { _id: id },
             {
                 $set: product,
@@ -16,16 +15,20 @@ export class ProductService {
             {
                 new: true,
             },
-        );
+        )) as Product;
     }
 
     async getById(id: string) {
-        return await ProductModel.findById(id);
+        return (await ProductModel.findById(id)) as Product;
     }
 
-    async getAll(searchQuery: string, filters: QueryFilters) {
+    async getAll(
+        searchQuery: string,
+        filters: QueryFilters,
+        pagination: { page: number; limit: number },
+    ) {
         const searchQueryRegex = new RegExp(searchQuery, 'i');
-        return (await ProductModel.aggregate([
+        const aggregate = ProductModel.aggregate([
             {
                 $match: {
                     $and: [
@@ -57,6 +60,17 @@ export class ProductService {
             {
                 $unwind: '$category',
             },
-        ]).exec()) as Product[];
+        ]);
+
+        return ProductModel.aggregatePaginate(aggregate, {
+            page: pagination.page,
+            limit: pagination.limit,
+            customLabels: {
+                docs: 'data',
+                totalDocs: 'total',
+                limit: 'perPage',
+                page: 'currentPage',
+            },
+        });
     }
 }

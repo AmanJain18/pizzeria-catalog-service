@@ -103,7 +103,7 @@ export class ProductController {
                 fileData: uploadedFile.data as Buffer,
             } as UploadFileData);
 
-            await this.storage.deleteFile(product.image);
+            await this.storage.deleteFile(product.image!);
         }
 
         const {
@@ -135,7 +135,7 @@ export class ProductController {
     }
 
     async getProducts(req: Request, res: Response) {
-        const { q, tenantId, categoryId, isPublished } = req.query;
+        const { q, tenantId, categoryId, isPublished, limit, page } = req.query;
         const filters: QueryFilters = {};
 
         if (tenantId) {
@@ -152,8 +152,15 @@ export class ProductController {
         if (isPublished === 'true') {
             filters.isPublished = true;
         }
-        const products = await this.productService.getAll(q as string, filters);
-        this.logger.info('All product fetched');
+        const products = await this.productService.getAll(
+            q as string,
+            filters,
+            {
+                page: page ? parseInt(page as string) : 1,
+                limit: limit ? parseInt(limit as string) : 10,
+            },
+        );
+        this.logger.info('All products are fetched');
         res.json(products);
     }
 }

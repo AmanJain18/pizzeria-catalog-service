@@ -25,6 +25,7 @@
         "@types/http-errors": "^2.0.4",
         "@types/jest": "^29.5.12",
         "@types/js-yaml": "^4.0.9",
+        "@types/mongoose-aggregate-paginate-v2": "^1.0.12",
         "@types/node": "^20.12.7",
         "@types/supertest": "^6.0.2",
         "@types/uuid": "^9.0.8",
@@ -64,6 +65,7 @@
         "js-yaml": "^4.1.0",
         "jwks-rsa": "^3.1.0",
         "mongoose": "^8.4.1",
+        "mongoose-aggregate-paginate-v2": "^1.0.7",
         "supertest": "^6.3.4",
         "uuid": "^9.0.1",
         "winston": "^3.13.0"

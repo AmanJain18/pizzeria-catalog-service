@@ -1,6 +1,7 @@
 // Purpose: Model for categories.
 
 import mongoose from 'mongoose';
+import aggregatePaginate from 'mongoose-aggregate-paginate-v2';
 import { Attribute, PriceConfiguration } from './productTypes';
 
 const priceConfigurationSchema = new mongoose.Schema<PriceConfiguration>({
@@ -68,4 +69,5 @@ const productSchema = new mongoose.Schema(
     { timestamps: true },
 );
 
+productSchema.plugin(aggregatePaginate);
 export default mongoose.model('Product', productSchema);

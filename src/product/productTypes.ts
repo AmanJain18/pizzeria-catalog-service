@@ -13,6 +13,7 @@ export interface Attribute {
 }
 
 export interface Product {
+    _id?: mongoose.Types.ObjectId;
     name: string;
     description: string;
     image?: string;
