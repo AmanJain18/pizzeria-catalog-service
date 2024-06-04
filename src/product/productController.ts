@@ -8,6 +8,8 @@ import { Product } from './productTypes';
 import { FileStorage, UploadFileData } from '../common/types/storage';
 import { v4 as uuid } from 'uuid';
 import { UploadedFile } from 'express-fileupload';
+import { AuthRequest } from '../common/types';
+import { Roles } from '../common/constant';
 
 export class ProductController {
     constructor(
@@ -71,11 +73,24 @@ export class ProductController {
 
         const { productId } = req.params;
         const uploadedFile = req.files?.image as UploadedFile;
+        const tenant = (req as AuthRequest).auth?.tenant;
 
         const product = await this.productService.getById(productId);
 
         if (!product) {
             return next(createHttpError(404, 'Product not found'));
+        }
+
+        if (
+            (req as AuthRequest).auth.role !== Roles.ADMIN &&
+            product.tenantId !== tenant
+        ) {
+            return next(
+                createHttpError(
+                    403,
+                    'Unauthorized, You are not allowed to update this product',
+                ),
+            );
         }
 
         let imageFilename: string | undefined;
