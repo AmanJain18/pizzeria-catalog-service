@@ -68,7 +68,7 @@ export class ProductService {
             customLabels: {
                 docs: 'data',
                 totalDocs: 'total',
-                limit: 'perPage',
+                limit: 'pageSize',
                 page: 'currentPage',
             },
         });
