@@ -12,9 +12,9 @@ app.get('/', (req, res) => {
     res.send('Welcome to catalog service');
 });
 
-app.use('/categories', categoryRouter);
+app.use('/api/v1/categories', categoryRouter);
 
-app.use('/products', productRouter);
+app.use('/api/v1/products', productRouter);
 
 app.use(globalErrorHandler);
 export default app;
