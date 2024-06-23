@@ -1,14 +1,56 @@
 # Ignore all files in the node_modules directory
 node_modules/
 
-# Ignore specific files
+# Ignore build and coverage artifacts
 build/
 dist/
 coverage/
-tests/
 
-# Ignore files with specific extensions
-*.json
-*.md
+# Ignore test-related files
+tests/
+*.spec.js
 *.spec.ts
+*.test.js
 *.test.ts
+
+# Ignore configuration and documentation files
+*.json
+*.yml
+*.yaml
+*.md
+*.rst
+*.txt
+
+# Ignore environment and lock files
+.env
+.env.* 
+*.lock
+
+# Ignore IDE and editor specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+
+# Ignore temporary files and directories
+tmp/
+temp/
+*.cache
+*.log
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore npm and yarn artifacts
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Ignore other common build artifacts
+public/
+out/
+release/
+logs/

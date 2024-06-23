@@ -1,7 +1,56 @@
 # Ignore artifacts:
-dist
-build
-coverage
-package*.json
-node_modules
-tsconfig.json
+dist/
+build/
+coverage/
+node_modules/
+
+# Configuration files
+*.json
+*.yml
+*.yaml
+
+# Environment files
+.env
+.env.* 
+
+# Ignore other potential artifacts
+*.log
+tmp/
+temp/
+*.cache
+*.lock
+
+# Ignore test files
+tests/
+*.spec.js
+*.spec.ts
+*.test.js
+*.test.ts
+
+# Ignore documentation files
+*.md
+*.rst
+*.txt
+
+# Ignore IDE and editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore other common build artifacts
+public/
+out/
+release/
+logs/
+
+# Ignore npm and yarn artifacts
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
