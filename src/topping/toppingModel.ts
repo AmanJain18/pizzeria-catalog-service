@@ -26,6 +26,11 @@ const toppingSchema = new mongoose.Schema<Topping>(
             required: true,
             default: false,
         },
+        isAvailable: {
+            type: Boolean,
+            required: true,
+            default: true,
+        },
     },
     { timestamps: true },
 );

@@ -9,6 +9,7 @@ interface BaseTopping {
     price: number;
     tenantId: string;
     isPublish: boolean;
+    isAvailable: boolean;
 }
 
 export interface CreateTopping extends BaseTopping {}
@@ -25,6 +26,7 @@ export interface CreateToppingRequest extends Request {
         price: number;
         tenantId: string;
         isPublish: boolean;
+        isAvailable?: boolean;
     };
     files: {
         image: UploadedFile;
@@ -37,6 +39,7 @@ export interface UpdateToppingRequest extends Request {
         price: number;
         tenantId: string;
         isPublish: boolean;
+        isAvailable?: boolean;
     };
     files?: {
         image?: UploadedFile;

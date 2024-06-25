@@ -8,7 +8,7 @@ export class ToppingService {
     }
 
     async getAll() {
-        return await ToppingModel.find();
+        return await ToppingModel.find().lean();
     }
 
     async getById(toppingId: string) {

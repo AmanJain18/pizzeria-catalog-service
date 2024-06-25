@@ -13,7 +13,6 @@ import { v4 as uuid } from 'uuid';
 import { UploadedFile } from 'express-fileupload';
 import { AuthRequest } from '../common/types';
 import { Roles } from '../common/constant';
-import mongoose from 'mongoose';
 
 export class ToppingController {
     constructor(
@@ -45,7 +44,7 @@ export class ToppingController {
             fileData: uploadedFile.data as Buffer,
         } as UploadFileData);
 
-        const { name, price, tenantId, isPublish } = req.body;
+        const { name, price, tenantId, isPublish, isAvailable } = req.body;
 
         this.logger.debug('New request to create topping', {
             name,
@@ -60,6 +59,7 @@ export class ToppingController {
             price,
             tenantId,
             isPublish: isPublish ? isPublish : false,
+            isAvailable: isAvailable ? isAvailable : true,
         });
 
         this.logger.info('New topping created', { id: topping._id });
@@ -70,10 +70,10 @@ export class ToppingController {
     }
 
     async getToppings(req: Request, res: Response) {
-        const toppingsResponse = await this.toppingService.getAll();
+        const toppingsResponse: Topping[] = await this.toppingService.getAll();
 
         this.logger.info('All toppings fetched');
-        const toppings = toppingsResponse.map((topping: Topping) => ({
+        const toppings = toppingsResponse.map((topping) => ({
             ...topping,
             image: this.storage.getFileUrl(topping.image),
         }));
@@ -135,7 +135,7 @@ export class ToppingController {
             await this.storage.deleteFile(topping.image);
         }
 
-        const { name, price, tenantId, isPublish } = req.body;
+        const { name, price, tenantId, isPublish, isAvailable } = req.body;
 
         this.logger.debug('New request to update topping', {
             toppingId,
@@ -151,6 +151,7 @@ export class ToppingController {
             price,
             tenantId,
             isPublish: isPublish ? isPublish : topping.isPublish,
+            isAvailable: isAvailable ? isAvailable : true,
         });
 
         this.logger.info('Topping updated', { toppingId: topping._id });

@@ -43,5 +43,11 @@ export default [
         .exists()
         .withMessage('Publish status is required')
         .isBoolean()
-        .withMessage('Publish status must be a boolean'),
+        .withMessage('Publish status must be a boolean')
+        .optional(),
+
+    body('isAvailable')
+        .isBoolean()
+        .withMessage('Availability must be a boolean')
+        .optional(),
 ];
