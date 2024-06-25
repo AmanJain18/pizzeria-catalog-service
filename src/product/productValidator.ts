@@ -1,5 +1,5 @@
 import { body } from 'express-validator';
-// import { Attribute } from './productTypes';
+import { PriceConfiguration, Attribute } from './productTypes';
 
 export default [
     // Validate 'name'
@@ -12,6 +12,7 @@ export default [
         .withMessage('Product name cannot be empty')
         .trim(),
 
+    // Validate 'description'
     body('description')
         .exists()
         .withMessage('Product description is required')
@@ -21,37 +22,46 @@ export default [
         .withMessage('Product description cannot be empty')
         .trim(),
 
+    // Validate 'image'
+    body('image').custom((value, { req }) => {
+        if (req.method === 'POST' && (!req.files || !req.files.image)) {
+            throw new Error('Product image is required');
+        }
+        return true;
+    }),
+
+    // Validate 'tenantId'
     body('tenantId')
         .exists()
-        .withMessage('Tenant id is required')
+        .withMessage('Tenant ID is required')
         .isString()
-        .withMessage('Tenant id must be a string')
+        .withMessage('Tenant ID must be a string')
         .notEmpty()
-        .withMessage('Tenant id cannot be empty')
+        .withMessage('Tenant ID cannot be empty')
         .trim(),
 
+    // Validate 'categoryId'
     body('categoryId')
         .exists()
-        .withMessage('Category id is required')
+        .withMessage('Category ID is required')
         .isString()
-        .withMessage('Category id must be a string')
+        .withMessage('Category ID must be a string')
         .notEmpty()
-        .withMessage('Category id cannot be empty')
+        .withMessage('Category ID cannot be empty')
         .trim(),
 
-    // Validate 'priceConfiguration' as an object with dynamic keys
+    // Validate 'priceConfiguration'
     body('priceConfiguration')
         .exists()
         .withMessage('Price configuration is required')
-        // .isObject()
-        // .withMessage('Price configuration must be an object')
-        .custom((priceConfiguration: string | number) => {
-            if (Object.keys(priceConfiguration).length === 0) {
+        .custom((value: PriceConfiguration) => {
+            if (Object.keys(value).length === 0) {
                 throw new Error('Price configuration cannot be empty');
             }
             return true;
         }),
 
+    // Validate 'priceType'
     body('priceConfiguration.*.priceType')
         .exists()
         .withMessage('Price type is required')
@@ -63,6 +73,7 @@ export default [
         .withMessage('Price type must be a string')
         .trim(),
 
+    // Validate 'sizeOptions'
     body('priceConfiguration.*.sizeOptions')
         .exists()
         .withMessage('Size options are required')
@@ -79,19 +90,20 @@ export default [
             return true;
         }),
 
-    // Validate 'attributes': array of objects with 'name', 'widgetType', 'defaultValue', and 'options'
-    body('attributes').exists().withMessage('Attributes are required'),
-    // .isArray()
-    // .withMessage('Attributes must be an array')
-    // .custom((attributes: Attribute[]) => {
-    //     if (!Array.isArray(attributes) || attributes.length === 0) {
-    //         throw new Error(
-    //             'Attributes array cannot be empty and must have at least one element',
-    //         );
-    //     }
-    //     return true;
-    // }),
+    // Validate 'attributes'
+    body('attributes')
+        .exists()
+        .withMessage('Attributes are required')
+        .notEmpty()
+        .withMessage('Attributes array cannot be empty')
+        .custom((attributes: Attribute[]) => {
+            if (attributes.length === 0) {
+                throw new Error('Attributes must have at least one element');
+            }
+            return true;
+        }),
 
+    // Validate 'attributes.name'
     body('attributes.*.name')
         .exists()
         .withMessage('Attribute name is required')
@@ -101,6 +113,7 @@ export default [
         .withMessage('Attribute name cannot be empty')
         .trim(),
 
+    // Validate 'attributes.value'
     body('attributes.*.value')
         .exists()
         .withMessage('Default value is required')
