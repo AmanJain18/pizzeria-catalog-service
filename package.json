@@ -2,8 +2,7 @@
     "name": "catalog-service",
     "version": "1.0.0",
     "description": "A catalog management service.",
-    "main": "index.js",
-    "type": "module",
+    "main": "dist/server.js",
     "scripts": {
         "test": "jest --watch --runInBand",
         "test:ci": "jest --ci --runInBand",

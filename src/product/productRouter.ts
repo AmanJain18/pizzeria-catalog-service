@@ -5,8 +5,7 @@ import express, {
     Response,
 } from 'express';
 import { ProductController } from './productController';
-import createProductValidator from './createProductValidator';
-import updateProductValidator from './updateProductValidator';
+import productValidator from './productValidator';
 import { ProductService } from './productService';
 import logger from '../config/logger';
 import { asyncFnWrapper } from '../common/utils/asyncFnWrapper';
@@ -16,6 +15,7 @@ import { Roles } from '../common/constant';
 import fileUpload from 'express-fileupload';
 import { GCPStorage } from '../common/services/GCPStorage';
 import createHttpError from 'http-errors';
+import { CreateProductRequest, UpdateProductRequest } from './productTypes';
 
 const router = express.Router();
 
@@ -38,18 +38,18 @@ router.post(
             next(createHttpError(400, 'File size limit exceeded'));
         },
     }),
-    createProductValidator,
+    productValidator,
     asyncFnWrapper(
         (req: Request, res: Response, next: NextFunction) =>
             productController.createProduct(
-                req,
+                req as CreateProductRequest,
                 res,
                 next,
             ) as unknown as RequestHandler,
     ),
 );
 
-router.patch(
+router.put(
     '/:productId',
     isAuthenticated,
     isAuthorized([Roles.ADMIN, Roles.MANAGER]),
@@ -60,11 +60,11 @@ router.patch(
             next(createHttpError(400, 'File size limit exceeded'));
         },
     }),
-    updateProductValidator,
+    productValidator,
     asyncFnWrapper(
         (req: Request, res: Response, next: NextFunction) =>
             productController.updateProduct(
-                req,
+                req as UpdateProductRequest,
                 res,
                 next,
             ) as unknown as RequestHandler,
@@ -78,6 +78,32 @@ router.get(
             productController.getProducts(
                 req,
                 res,
+            ) as unknown as RequestHandler,
+    ),
+);
+
+router.get(
+    '/:productId',
+    asyncFnWrapper(
+        (req: Request, res: Response, next: NextFunction) =>
+            productController.getProductById(
+                req,
+                res,
+                next,
+            ) as unknown as RequestHandler,
+    ),
+);
+
+router.delete(
+    '/:productId',
+    isAuthenticated,
+    isAuthorized([Roles.ADMIN, Roles.MANAGER]),
+    asyncFnWrapper(
+        (req: Request, res: Response, next: NextFunction) =>
+            productController.deleteProduct(
+                req,
+                res,
+                next,
             ) as unknown as RequestHandler,
     ),
 );
