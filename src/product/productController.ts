@@ -1,10 +1,15 @@
-import { Request } from 'express-jwt';
+import { Request } from 'express';
 import { NextFunction, Response } from 'express';
 import { validationResult } from 'express-validator';
 import { Logger } from 'winston';
 import createHttpError from 'http-errors';
 import { ProductService } from './productService';
-import { Product, QueryFilters } from './productTypes';
+import {
+    Product,
+    QueryFilters,
+    CreateProductRequest,
+    UpdateProductRequest,
+} from './productTypes';
 import { FileStorage, UploadFileData } from '../common/types/storage';
 import { v4 as uuid } from 'uuid';
 import { UploadedFile } from 'express-fileupload';
@@ -18,7 +23,12 @@ export class ProductController {
         private storage: FileStorage,
         private logger: Logger,
     ) {}
-    async createProduct(req: Request, res: Response, next: NextFunction) {
+
+    async createProduct(
+        req: CreateProductRequest,
+        res: Response,
+        next: NextFunction,
+    ) {
         const result = validationResult(req);
 
         if (!result.isEmpty()) {
@@ -45,18 +55,22 @@ export class ProductController {
             categoryId,
             tenantId,
             isPublished,
-        } = req.body as Product;
+        } = req.body;
+
+        // Parse JSON strings
+        const parsedPriceConfiguration = JSON.parse(priceConfiguration);
+        const parsedAttributes = JSON.parse(attributes);
 
         const product = await this.productService.create({
             name,
             description,
-            priceConfiguration: JSON.parse(priceConfiguration as string),
-            attributes: JSON.parse(attributes as string),
+            priceConfiguration: parsedPriceConfiguration,
+            attributes: parsedAttributes,
             tenantId,
             categoryId,
-            isPublished,
+            isPublished: isPublished ? isPublished : false,
             image: imageFilename,
-        } as Product);
+        });
 
         this.logger.info('New product created', { id: product._id });
         res.status(201).json({
@@ -65,7 +79,11 @@ export class ProductController {
         });
     }
 
-    async updateProduct(req: Request, res: Response, next: NextFunction) {
+    async updateProduct(
+        req: UpdateProductRequest,
+        res: Response,
+        next: NextFunction,
+    ) {
         const result = validationResult(req);
 
         if (!result.isEmpty()) {
@@ -114,18 +132,22 @@ export class ProductController {
             categoryId,
             tenantId,
             isPublished,
-        } = req.body as Product;
+        } = req.body;
+
+        // Parse JSON strings
+        const parsedPriceConfiguration = JSON.parse(priceConfiguration);
+        const parsedAttributes = JSON.parse(attributes);
 
         await this.productService.update(productId, {
             name,
             description,
-            priceConfiguration: JSON.parse(priceConfiguration as string),
-            attributes: JSON.parse(attributes as string),
+            priceConfiguration: parsedPriceConfiguration,
+            attributes: parsedAttributes,
             tenantId,
             categoryId,
-            isPublished,
-            image: uploadedFile ? imageFilename : product.image,
-        } as Product);
+            isPublished: isPublished ? isPublished : product.isPublished,
+            image: uploadedFile ? imageFilename! : product.image,
+        });
 
         this.logger.info('Product updated', { productId: productId });
         res.json({
@@ -170,5 +192,51 @@ export class ProductController {
         );
 
         res.json(products);
+    }
+
+    async getProductById(req: Request, res: Response, next: NextFunction) {
+        const { productId } = req.params;
+        const product = await this.productService.getById(productId);
+
+        if (!product) {
+            return next(createHttpError(404, 'Product not found'));
+        }
+
+        this.logger.info(`Getting product`, { id: product._id });
+        res.json({
+            ...product,
+            image: this.storage.getFileUrl(product.image),
+        });
+    }
+
+    async deleteProduct(req: Request, res: Response, next: NextFunction) {
+        const { productId } = req.params;
+        const tenant = (req as AuthRequest).auth?.tenant;
+        const product = await this.productService.getById(productId);
+
+        if (!product) {
+            return next(createHttpError(404, 'Product not found'));
+        }
+
+        if (
+            (req as AuthRequest).auth.role !== Roles.ADMIN &&
+            product.tenantId !== tenant
+        ) {
+            return next(
+                createHttpError(
+                    403,
+                    'Unauthorized, You are not allowed to delete this product',
+                ),
+            );
+        }
+
+        await this.productService.delete(productId);
+        await this.storage.deleteFile(product.image!);
+
+        this.logger.info(`Product deleted`, { id: product._id });
+        res.json({
+            id: productId,
+            message: 'Product deleted',
+        });
     }
 }

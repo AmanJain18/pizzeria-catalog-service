@@ -1,25 +1,26 @@
 import ProductModel from './productModel';
-import { Product, QueryFilters } from './productTypes';
+import { QueryFilters, CreateProduct, UpdateProduct } from './productTypes';
 
 export class ProductService {
-    async create(product: Product) {
-        return (await ProductModel.create(product)) as Product;
+    async create(product: CreateProduct) {
+        const newProduct = new ProductModel(product);
+        return await newProduct.save();
     }
 
-    async update(id: string, product: Product) {
-        return (await ProductModel.findOneAndUpdate(
-            { _id: id },
+    async getById(productId: string) {
+        return await ProductModel.findOne({ _id: productId });
+    }
+
+    async update(productId: string, product: UpdateProduct) {
+        return await ProductModel.findOneAndUpdate(
+            { _id: productId },
             {
                 $set: product,
             },
             {
                 new: true,
             },
-        )) as Product;
-    }
-
-    async getById(id: string) {
-        return (await ProductModel.findById(id)) as Product;
+        );
     }
 
     async getAll(
@@ -72,5 +73,9 @@ export class ProductService {
                 page: 'currentPage',
             },
         });
+    }
+
+    async delete(productId: string) {
+        return await ProductModel.findByIdAndDelete(productId);
     }
 }
