@@ -1,4 +1,5 @@
 import { Request } from 'express';
+import { UploadedFile } from 'express-fileupload';
 import mongoose from 'mongoose';
 
 // Base interface with common fields
@@ -19,9 +20,25 @@ export interface Topping extends BaseTopping {
 }
 
 export interface CreateToppingRequest extends Request {
-    body: CreateTopping;
+    body: {
+        name: string;
+        price: number;
+        tenantId: string;
+        isPublish: boolean;
+    };
+    files: {
+        image: UploadedFile;
+    };
 }
 
 export interface UpdateToppingRequest extends Request {
-    body: UpdateTopping;
+    body: {
+        name: string;
+        price: number;
+        tenantId: string;
+        isPublish: boolean;
+    };
+    files?: {
+        image?: UploadedFile;
+    };
 }
